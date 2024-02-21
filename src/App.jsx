@@ -7,6 +7,7 @@ import bannerBackground from './assets/fotoDoBanner.png'
 import Galeria from "./Componentes/Galeria"
 import fotos from './fotos.json'
 import { useState } from "react"
+import ModalDeZoom from "./Componentes/ModalDeZoom"
 
 const FundoGradiente = styled.div`
   background: linear-gradient(174.61deg, #041833 4.16%, #04244F 48%, #154580 96.76%);
@@ -33,7 +34,24 @@ const ConteudoGaleria = styled.section`
 `
 
 function App() {
-  const [fotosDaGaleria, setFotosDaGaleria] = useState(fotos)
+  const [fotosDaGaleria, setfotosDaGaleria] = useState(fotos)
+  const [fotoSelecionada, setfotoSelecionada] = useState(fotos[0])
+
+  const aoAlternarFavorito = (foto) => {
+    if (foto.id === fotoSelecionada?.id) {
+      setfotoSelecionada({
+        ...fotoSelecionada,
+        favorita: !fotoSelecionada.favorita
+      })
+    }
+    setfotosDaGaleria(fotosDaGaleria.map(fotoDaGaleria => {
+      return {
+        ...fotoDaGaleria,
+        favorita: fotoDaGaleria.id === foto.id ? !foto.favorita : fotoDaGaleria.favorita
+      }
+    }))
+  }
+
   return (
     <FundoGradiente>
       <EstilosGlobais />
@@ -43,13 +61,22 @@ function App() {
           <BarraLateral />
           <ConteudoGaleria>
             <Banner
-              texto='A galeria mais completa de todo o espaço'
+              texto="A galeria mais completa de fotos do espaço!"
               backgroundImage={bannerBackground}
             />
-            <Galeria fotos={fotosDaGaleria}/>
+            <Galeria 
+              aoFotoSelecionada={foto => setfotoSelecionada(foto)} 
+              aoAlternarFavorito={aoAlternarFavorito}
+              fotos={fotosDaGaleria}
+            />
           </ConteudoGaleria>
         </MainContainer>
       </AppContainer>
+      <ModalDeZoom 
+        foto={fotoSelecionada}
+        aoFechar={() => setfotoSelecionada(null)}
+        aoAlternarFavorito={aoAlternarFavorito}
+      />
     </FundoGradiente>
   )
 }
