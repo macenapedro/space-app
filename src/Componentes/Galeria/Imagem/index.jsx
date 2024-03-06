@@ -51,7 +51,7 @@ const Imagem = ({ foto, expandida = false, aoZoomSolicitado, aoAlternarFavorito 
             <h3>{foto.titulo}</h3>
             <Rodape>
                 <h4>{foto.fonte}</h4>
-                <BotaoIcone onClick={() => aoAlternarFavorito(foto)}>
+                <BotaoIcone onMouseEnter={() => aoAlternarFavorito(foto)}>
                     <img src={iconeFavorito} alt="Icone de favorito" />
                 </BotaoIcone>
                 {!expandida && <BotaoIcone aria-hidden={expandida} onClick={() => aoZoomSolicitado(foto)}>
